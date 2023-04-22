@@ -695,10 +695,13 @@
             "30ab4d94774ebfab",
             "0a0a796613de2d14",
             "829dbe4dbf3879e9",
-            "6da69c8ad9b8635c"
+            "6da69c8ad9b8635c",
+            "4ab5e5f830c1ff99"
         ],
         "x": 94,
-        "y": 39
+        "y": 39,
+        "w": 1888,
+        "h": 1162
     },
     {
         "id": "fcc87bbf870e413f",
@@ -9031,7 +9034,8 @@
         "y": 680,
         "wires": [
             [
-                "60841b65e7dfee98"
+                "60841b65e7dfee98",
+                "4ab5e5f830c1ff99"
             ]
         ]
     },
@@ -9041,7 +9045,7 @@
         "z": "23d2095ae5660c9d",
         "g": "d2e221eb4b881ebc",
         "name": "function 286",
-        "func": "msg.collection = \"history\"\nmsg.query = {\n    _id: objectid(msg.payload._id)\n}\nconst transformedComponent = msg.payload.component ? msg.payload.component.map(obj => {\n    // node.warn(obj)\n    const [id, { amount, article, name}] = Object.entries(obj)[0];\n    return { id: objectid(id), amount, article, name};\n}) : \"\";\nmsg.fromApp = {\n        \"sku\": msg.payload.sku,\n        \"typeRepair\": msg.payload.typeRepair,\n        \"components\": transformedComponent,\n    }\n\nmsg.payload = {\n    $set:{\n    \"sku\": msg.payload.sku,\n    \"typeRepair\": msg.payload.typeRepair,\n    \"engineer\": objectid(msg.payload.engineer),\n    \"components\": transformedComponent,\n    \"description\": msg.payload.description,\n    \"dateFinish\": msg.payload.dateFinish,\n}\n}\n\nreturn msg;\n\n",
+        "func": "msg.collection = \"history\"\nmsg.query = {\n    _id: objectid(msg.payload._id)\n}\nconst transformedComponent = msg.payload.component ? msg.payload.component.map(obj => {\n     node.warn(obj)\n    const [id, { amount, article, name,price}] = Object.entries(obj)[0];\n    return { id: objectid(id), amount, article, name,price};\n}) : \"\";\nmsg.fromApp = {\n        \"sku\": msg.payload.sku,\n        \"typeRepair\": msg.payload.typeRepair,\n        \"components\": transformedComponent,\n    }\n\nmsg.payload = {\n    $set:{\n    \"sku\": msg.payload.sku,\n    \"typeRepair\": msg.payload.typeRepair,\n    \"engineer\": objectid(msg.payload.engineer),\n    \"components\": transformedComponent,\n    \"description\": msg.payload.description,\n    \"dateFinish\": msg.payload.dateFinish,\n}\n}\n\nreturn msg;\n\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -9057,7 +9061,8 @@
         "wires": [
             [
                 "140662385ecd4ee5",
-                "213eb5165695eb0e"
+                "213eb5165695eb0e",
+                "4ab5e5f830c1ff99"
             ]
         ]
     },
@@ -9498,7 +9503,8 @@
         "wires": [
             [
                 "404ce79dc9a21028",
-                "f4f00af601ab2540"
+                "f4f00af601ab2540",
+                "5719e2aead5f696e"
             ]
         ]
     },
@@ -9628,7 +9634,8 @@
         "y": 1160,
         "wires": [
             [
-                "d597429c893c92fd"
+                "d597429c893c92fd",
+                "5719e2aead5f696e"
             ]
         ]
     },
@@ -9638,7 +9645,7 @@
         "z": "23d2095ae5660c9d",
         "g": "d2e221eb4b881ebc",
         "name": "function 297",
-        "func": "msg.query = {\n    _id: objectid(msg.payload[0]._id)\n}\nlet newQuantity = msg.payload[0].quantity +( msg.amount)\nmsg.payload = {\n    $set: {\n        quantity: newQuantity\n    }\n}\nreturn msg;",
+        "func": "msg.query = {\n    _id: objectid(msg.payload[0]._id)\n}\nlet newQuantity = msg.payload[0].quantity +( msg.amount)\nnode.warn(msg.payload[0].quantity)\nmsg.payload = {\n    $set: {\n        quantity: newQuantity\n    }\n}\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -9653,7 +9660,8 @@
         "y": 1160,
         "wires": [
             [
-                "30ab4d94774ebfab"
+                "30ab4d94774ebfab",
+                "5719e2aead5f696e"
             ]
         ]
     },
@@ -9819,5 +9827,308 @@
                 "fb3f755470755640"
             ]
         ]
+    },
+    {
+        "id": "54545193a1b83147",
+        "type": "function",
+        "z": "23d2095ae5660c9d",
+        "name": "function 301",
+        "func": "// // Перетворюємо масив елементів у масив рядків таблиці\nconst rows = msg.componets.map(item => [{ text: item.name, style: 'tableContent' }, { text: item.article, style: 'tableContent' }, { text: item.amount, style: 'tableContent' }, { text: item.price, style: 'tableContent' }, { text: item.totalPrice, style: 'tableContent' }]);\n\n// Додаємо рядки таблиці до масиву body\nconst body = [[{ text: 'Назва', style: 'tableHeader' }, { text: 'Артикул', style: 'tableHeader' }, { text: 'Кількість', style: 'tableHeader' }, { text: 'Ціна €', style: 'tableHeader' }, { text: 'Сума €', style: 'tableHeader' }],\n...rows\n];\n\n// Оновлюємо об'єкт payload з оновленим масивом body\nmsg.payload = {\n    content: [\n        { text: 'Акт виконаних робіт', style: 'header' },\n        { text: `Обладнання: ${msg.payload.items}` },\n        { text: `Sku: ${msg.payload.Sku}` },\n        { text: `Комплектація: ${msg.payload.complection}` },\n        { text: `Зовнішній стан: ${msg.payload.looks}` },\n        { text: `Зауваження та заключення: ${msg.payload.moreInfo}` },\n        { text: `Клієнт: ${msg.payload.client}` },\n        {\n            style: 'tableStyle',\n            table: {\n                headerRows: 1,\n                widths: ['*', '*', '*', '*', '*'],\n                body: body\n            }\n        }\n    ],\n    styles: {\n        header: {\n            fontSize: 18,\n            bold: true,\n            margin: [0, 0, 0, 10]\n        },\n        tableStyle: {\n            margin: [0, 10, 0, 10]\n        },\n        tableHeader: {\n            fontSize: 12,\n            bold: true,\n            fillColor: '#eee',\n            margin: [0, 2, 0, 2]\n        },\n        tableContent: {\n            fontSize: 10,\n            margin: [0, 2, 0, 2]\n        }\n    }\n};\n\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 1320,
+        "wires": [
+            [
+                "c64c51f604b0effb",
+                "03b0d797b2259124"
+            ]
+        ]
+    },
+    {
+        "id": "3e1d576bdd9b4232",
+        "type": "http in",
+        "z": "23d2095ae5660c9d",
+        "name": "",
+        "url": "/pdf",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 260,
+        "y": 1320,
+        "wires": [
+            [
+                "d9c92a6e1d5be5ec",
+                "c8b11f0b7bb40860"
+            ]
+        ]
+    },
+    {
+        "id": "03b0d797b2259124",
+        "type": "pdfmake",
+        "z": "23d2095ae5660c9d",
+        "name": "",
+        "outputType": "Buffer",
+        "inputProperty": "payload",
+        "options": "{}",
+        "outputProperty": "payload",
+        "x": 700,
+        "y": 1320,
+        "wires": [
+            [
+                "46d7cd0cb846ec48"
+            ]
+        ]
+    },
+    {
+        "id": "46d7cd0cb846ec48",
+        "type": "function",
+        "z": "23d2095ae5660c9d",
+        "name": "function 302",
+        "func": "msg.headers = {\n    \"Content-Disposition\": \"inline\",\n    \"filename\": \"calls.pdf\",\n    'Content-Type': 'application/pdf',\n    \"charset\": 'utf-8',\n    \"content-transfer-encoding\": \"binary\"\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 850,
+        "y": 1320,
+        "wires": [
+            [
+                "e4d6744093899772",
+                "c64c51f604b0effb"
+            ]
+        ]
+    },
+    {
+        "id": "e4d6744093899772",
+        "type": "http response",
+        "z": "23d2095ae5660c9d",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1010,
+        "y": 1340,
+        "wires": []
+    },
+    {
+        "id": "d9c92a6e1d5be5ec",
+        "type": "function",
+        "z": "23d2095ae5660c9d",
+        "name": "function 303",
+        "func": "// msg.payload = {\n//     items: 'Лінійка виробів для кухні',\n//     Sku: 'SKU-123456',\n//     complection: 'Всі необхідні компоненти в комплекті',\n//     looks: 'Нове',\n//     moreInfo: 'Все зроблено якісно, без зауважень',\n//     client: 'Клієнтов Олександр',\n//     name1: 'Кухонний фартух',\n//     article1: 'ART-001',\n//     quantity1: 2,\n//     price1: 350,\n//     amount1: 700,\n//     name2: 'Підставка для кухонних приборів',\n//     article2: 'ART-002',\n//     quantity2: 1,\n//     price2: 150,\n//     amount2: 150,\n//     name3: 'Набір кухонних рукавичок',\n//     article3: 'ART-003',\n//     quantity3: 3,\n//     price3: 50,\n//     amount3: 150,\n// }\n\nmsg.componets= JSON.parse(msg.payload.components)\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 375,
+        "y": 1320,
+        "wires": [
+            [
+                "c8b11f0b7bb40860",
+                "54545193a1b83147"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "68c0515eb93b32f1",
+        "type": "http in",
+        "z": "23d2095ae5660c9d",
+        "name": "",
+        "url": "/getCatalogItemsAct",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 250,
+        "y": 1440,
+        "wires": [
+            [
+                "6d6b7a27b0f43433",
+                "43d435438fbab62c"
+            ]
+        ]
+    },
+    {
+        "id": "cd48fdd09a1ead89",
+        "type": "link call",
+        "z": "23d2095ae5660c9d",
+        "name": "",
+        "links": [
+            "d44346ce1ee72fd9"
+        ],
+        "linkType": "static",
+        "timeout": "30",
+        "x": 710,
+        "y": 1440,
+        "wires": [
+            [
+                "e0343084d3064eed",
+                "03bceb9f00fb2d6f"
+            ]
+        ]
+    },
+    {
+        "id": "eeaef2cd43fb18cf",
+        "type": "http response",
+        "z": "23d2095ae5660c9d",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1070,
+        "y": 1440,
+        "wires": []
+    },
+    {
+        "id": "43d435438fbab62c",
+        "type": "function",
+        "z": "23d2095ae5660c9d",
+        "name": "to BD",
+        "func": "msg.collection = \"catalog\";\nlet match = {sku: msg.req.query.sku};\n\n\n\n\n\n\n\nmsg.payload = [\n    {\n        $match: {\n            \"deleted\": false,\n            ...match\n        }\n    },\n    {\n        $lookup: {\n            from: \"warehouse\",\n            localField: \"address\",\n            foreignField: \"_id\",\n            as: \"warehouse_info\"\n        }\n    },\n    {\n        $lookup: {\n            from: \"category\",\n            localField: \"category\",\n            foreignField: \"_id\",\n            as: \"category_info\"\n        }\n    }\n\n\n\n];\n\nreturn msg;\n\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "objectid",
+                "module": "objectid"
+            }
+        ],
+        "x": 490,
+        "y": 1440,
+        "wires": [
+            [
+                "cd48fdd09a1ead89",
+                "03bceb9f00fb2d6f"
+            ]
+        ]
+    },
+    {
+        "id": "e0343084d3064eed",
+        "type": "function",
+        "z": "23d2095ae5660c9d",
+        "name": "to App",
+        "func": "msg.payload = msg.payload.map(e=>{\n    return {\n        _id: e._id,\n        label: e.label,\n        model: e.model,\n        type: e.type,\n        serialNumber: e.serialNumber,\n        color: e.color,\n        sku: e.sku,\n        address: e.address,\n        category: e.category,\n        qr: e.qr,\n        more: e.more,\n        deleted: e.deleted,\n        isClient:e.isClient,\n        addressLabel: e.warehouse_info[0].warehouse,\n        addressWarehouse: e.warehouse_info[0].address,\n        categoryLabel: e.category_info[0].label,\n        status: e.status,\n        categoryName: e.category_info[0].name\n\n    }\n})\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 930,
+        "y": 1440,
+        "wires": [
+            [
+                "eeaef2cd43fb18cf",
+                "03bceb9f00fb2d6f"
+            ]
+        ]
+    },
+    {
+        "id": "03bceb9f00fb2d6f",
+        "type": "debug",
+        "z": "23d2095ae5660c9d",
+        "name": "debug 38",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 800,
+        "y": 1500,
+        "wires": []
+    },
+    {
+        "id": "4ab5e5f830c1ff99",
+        "type": "debug",
+        "z": "23d2095ae5660c9d",
+        "g": "d2e221eb4b881ebc",
+        "name": "debug 39",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 560,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "6d6b7a27b0f43433",
+        "type": "debug",
+        "z": "23d2095ae5660c9d",
+        "name": "debug 40",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 480,
+        "y": 1500,
+        "wires": []
+    },
+    {
+        "id": "c64c51f604b0effb",
+        "type": "debug",
+        "z": "23d2095ae5660c9d",
+        "name": "debug 41",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 820,
+        "y": 1240,
+        "wires": []
+    },
+    {
+        "id": "c8b11f0b7bb40860",
+        "type": "debug",
+        "z": "23d2095ae5660c9d",
+        "name": "debug 42",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 460,
+        "y": 1240,
+        "wires": []
+    },
+    {
+        "id": "5719e2aead5f696e",
+        "type": "debug",
+        "z": "23d2095ae5660c9d",
+        "name": "debug 43",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1600,
+        "y": 1240,
+        "wires": []
     }
 ]

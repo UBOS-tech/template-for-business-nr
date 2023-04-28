@@ -9833,20 +9833,21 @@
         "type": "function",
         "z": "23d2095ae5660c9d",
         "name": "function 301",
-        "func": "\n// // Перетворюємо масив елементів у масив рядків таблиці\nconst rows = msg.componets.map(item => [{ text: item.name, style: 'tableContent' }, { text: item.article, style: 'tableContent' }, { text: item.amount, style: 'tableContent' }, { text: item.price, style: 'tableContent' }, { text: item.totalPrice, style: 'tableContent' }]);\n\n// Додаємо рядки таблиці до масиву body\nconst body = [[{ text: 'Назва', style: 'tableHeader' }, { text: 'Артикул', style: 'tableHeader' }, { text: 'Кількість', style: 'tableHeader' }, { text: 'Ціна €', style: 'tableHeader' }, { text: 'Сума €', style: 'tableHeader' }],\n...rows\n];\n\n// // Оновлюємо об'єкт payload з оновленим масивом body\n// msg.payload = {\n//     content: [\n//         { text: 'Акт виконаних робіт', style: 'header' },\n//         { text: `Обладнання: ${msg.payload.items}` },\n//         { text: `Sku: ${msg.payload.Sku}` },\n//         { text: `Комплектація: ${msg.payload.complection}` },\n//         { text: `Зовнішній стан: ${msg.payload.looks}` },\n//         { text: `Зауваження та заключення: ${msg.payload.moreInfo}` },\n//         { text: `Клієнт: ${msg.payload.client}` },\n//         {\n//             style: 'tableStyle',\n//             table: {\n//                 headerRows: 1,\n//                 widths: ['*', '*', '*', '*', '*'],\n//                 body: body\n//             }\n//         }\n//     ],\n//     styles: {\n//         header: {\n//             fontSize: 18,\n//             bold: true,\n//             margin: [0, 0, 0, 10]\n//         },\n//         tableStyle: {\n//             margin: [0, 10, 0, 10]\n//         },\n//         tableHeader: {\n//             fontSize: 12,\n//             bold: true,\n//             fillColor: '#eee',\n//             margin: [0, 2, 0, 2]\n//         },\n//         tableContent: {\n//             fontSize: 10,\n//             margin: [0, 2, 0, 2]\n//         }\n//     }\n// };\n\n// return msg;\n// Calculate the total sum of the \"totalPrice\" column\nconst total = rows.reduce((acc, row) => acc + parseFloat(row[row.length - 1].text), 0);\n\n// Add a row to the \"body\" array with the total sum\nbody.push([{ text: 'Всього €', style: 'tableHeader' }, '', '', '', { text: total.toFixed(2), style: 'tableContent' }]);\n\n// Update the \"msg.payload\" object with the modified \"body\" array\nmsg.payload = {\n    content: [\n        { text: 'Акт виконаних робіт', style: 'header' },\n        { text: `Обладнання: ${msg.payload.items}` },\n        { text: `Sku: ${msg.payload.Sku}` },\n        { text: `Комплектація: ${msg.payload.complection}` },\n        { text: `Зовнішній стан: ${msg.payload.looks}` },\n        { text: `Зауваження та заключення: ${msg.payload.moreInfo}` },\n        { text: `Клієнт: ${msg.payload.client}` },\n        { text: `Дата: ${new Date()}` },\n        {\n            style: 'tableStyle',\n            table: {\n                headerRows: 1,\n                widths: ['*', '*', '*', '*', '*'],\n                body: body\n            }\n        }\n    ],\n    styles: {\n        header: {\n            fontSize: 18,\n            bold: true,\n            margin: [0, 0, 0, 10]\n        },\n        tableStyle: {\n            margin: [0, 10, 0, 10]\n        },\n        tableHeader: {\n            fontSize: 12,\n            bold: true,\n            fillColor: '#eee',\n            margin: [0, 2, 0, 2]\n        },\n        tableContent: {\n            fontSize: 10,\n            margin: [0, 2, 0, 2]\n        }\n    }\n};\n\nreturn msg;\n",
+        "func": "\n// // Перетворюємо масив елементів у масив рядків таблиці\nconst rows = msg.componets.map(item => [{ text: item.name, style: 'tableContent' }, { text: item.article, style: 'tableContent' }, { text: item.amount, style: 'tableContent' }, { text: item.price, style: 'tableContent' }, { text: item.totalPrice, style: 'tableContent' }]);\n\n// Додаємо рядки таблиці до масиву body\nconst body = [[{ text: 'Назва', style: 'tableHeader' }, { text: 'Артикул', style: 'tableHeader' }, { text: 'Кількість', style: 'tableHeader' }, { text: 'Ціна €', style: 'tableHeader' }, { text: 'Сума €', style: 'tableHeader' }],\n...rows\n];\n\n// // Оновлюємо об'єкт payload з оновленим масивом body\n// msg.payload = {\n//     content: [\n//         { text: 'Акт виконаних робіт', style: 'header' },\n//         { text: `Обладнання: ${msg.payload.items}` },\n//         { text: `Sku: ${msg.payload.Sku}` },\n//         { text: `Комплектація: ${msg.payload.complection}` },\n//         { text: `Зовнішній стан: ${msg.payload.looks}` },\n//         { text: `Зауваження та заключення: ${msg.payload.moreInfo}` },\n//         { text: `Клієнт: ${msg.payload.client}` },\n//         {\n//             style: 'tableStyle',\n//             table: {\n//                 headerRows: 1,\n//                 widths: ['*', '*', '*', '*', '*'],\n//                 body: body\n//             }\n//         }\n//     ],\n//     styles: {\n//         header: {\n//             fontSize: 18,\n//             bold: true,\n//             margin: [0, 0, 0, 10]\n//         },\n//         tableStyle: {\n//             margin: [0, 10, 0, 10]\n//         },\n//         tableHeader: {\n//             fontSize: 12,\n//             bold: true,\n//             fillColor: '#eee',\n//             margin: [0, 2, 0, 2]\n//         },\n//         tableContent: {\n//             fontSize: 10,\n//             margin: [0, 2, 0, 2]\n//         }\n//     }\n// };\n\n// return msg;\n// Calculate the total sum of the \"totalPrice\" column\nconst total = rows.reduce((acc, row) => acc + parseFloat(row[row.length - 1].text), 0);\n\n// Add a row to the \"body\" array with the total sum\nbody.push([{ text: 'Всього €', style: 'tableHeader' }, '', '', '', { text: total.toFixed(2), style: 'tableContent' }]);\n\n// Update the \"msg.payload\" object with the modified \"body\" array\nmsg.payload = {\n    content: [\n        { text: 'Акт виконаних робіт', style: 'header' },\n        { text: `Обладнання: ${msg.payload.items}` },\n        { text: `Sku: ${msg.payload.Sku}` },\n        { text: `Комплектація: ${msg.payload.complection}` },\n        { text: `Зовнішній стан: ${msg.payload.looks}` },\n        { text: `Зауваження та заключення: ${msg.payload.moreInfo}` },\n        { text: `Клієнт: ${msg.payload.client}` },\n        { text: `Дата: ${msg.data}` },\n        {\n            style: 'tableStyle',\n            table: {\n                headerRows: 1,\n                widths: ['*', '*', '*', '*', '*'],\n                body: body\n            }\n        }\n    ],\n    styles: {\n        header: {\n            fontSize: 18,\n            bold: true,\n            margin: [0, 0, 0, 10]\n        },\n        tableStyle: {\n            margin: [0, 10, 0, 10]\n        },\n        tableHeader: {\n            fontSize: 12,\n            bold: true,\n            fillColor: '#eee',\n            margin: [0, 2, 0, 2]\n        },\n        tableContent: {\n            fontSize: 10,\n            margin: [0, 2, 0, 2]\n        }\n    }\n};\n\nreturn msg;\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 490,
+        "x": 565,
         "y": 1320,
         "wires": [
             [
                 "c64c51f604b0effb",
                 "03b0d797b2259124"
             ]
-        ]
+        ],
+        "l": false
     },
     {
         "id": "3e1d576bdd9b4232",
@@ -9857,7 +9858,7 @@
         "method": "get",
         "upload": false,
         "swaggerDoc": "",
-        "x": 260,
+        "x": 220,
         "y": 1320,
         "wires": [
             [
@@ -9925,12 +9926,12 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 375,
+        "x": 325,
         "y": 1320,
         "wires": [
             [
                 "c8b11f0b7bb40860",
-                "54545193a1b83147"
+                "a5d25c394d777c19"
             ]
         ],
         "l": false
@@ -10130,5 +10131,24 @@
         "x": 1600,
         "y": 1240,
         "wires": []
+    },
+    {
+        "id": "a5d25c394d777c19",
+        "type": "function",
+        "z": "23d2095ae5660c9d",
+        "name": "convertada",
+        "func": "\nconst setMonthName = (monthNumber) => {\n    let result = {}\n    switch (monthNumber) {\n        case 1:\n            result = {\n                shortNameEng: \"Jan\",\n                shortNameHeb: \"Січень\",\n            }\n            break;\n        case 2:\n            result = {\n                shortNameEng: \"Feb\",\n                shortNameHeb: \"Лютий\",\n            }\n            break;\n        case 3:\n            result = {\n                shortNameEng: \"Mar\",\n                shortNameHeb: \"Березень\",\n            }\n            break;\n        case 4:\n            result = {\n                shortNameEng: \"Apr\",\n                shortNameHeb: \"Квітень\",\n            }\n            break;\n        case 5:\n            result = {\n                shortNameEng: \"May\",\n                shortNameHeb: \"Травень\",\n            }\n            break;\n        case 6:\n            result = {\n                shortNameEng: \"Jun\",\n                shortNameHeb: \"Червень\",\n            }\n            break;\n        case 7:\n            result = {\n                shortNameEng: \"Jul\",\n                shortNameHeb: \"Липень\",\n            }\n            break;\n        case 8:\n            result = {\n                shortNameEng: \"Aug\",\n                shortNameHeb: \"Серпень\",\n            }\n            break;\n        case 9:\n            result = {\n                shortNameEng: \"Sep\",\n                shortNameHeb: \"Вересень\",\n            }\n            break;\n        case 10:\n            result = {\n                shortNameEng: \"Oct\",\n                shortNameHeb: \"Жовтень\",\n            }\n            break;\n        case 11:\n            result = {\n                shortNameEng: \"Nov\",\n                shortNameHeb: \"Листопад\",\n            }\n            break;\n        case 12:\n            result = {\n                shortNameEng: \"Dec\",\n                shortNameHeb: \"Грудень\",\n            }\n            break;\n        default:\n            result = {\n                shortNameEng: monthNumber,\n                shortNameHeb: monthNumber,\n            }\n    }\n    node.warn(result.shortNameHeb)\n    return result.shortNameHeb\n}\n\nconst dateConverter = () => {\n    const date = new Date()\n\n    // let day = date.getDate()\n    // let month = +date.getMonth() + 1\n    // month = setMonthName(month)\n    let day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()\n\n    let month = +date.getMonth() + 1\n    month = month < 10 ? '0' + month : month\n\n    return `${day}.${month}.${date.getFullYear()}`\n}\n\nmsg.data = dateConverter()\n\n\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 1320,
+        "wires": [
+            [
+                "54545193a1b83147"
+            ]
+        ]
     }
 ]

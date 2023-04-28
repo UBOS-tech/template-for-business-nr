@@ -9888,7 +9888,7 @@
         "type": "function",
         "z": "23d2095ae5660c9d",
         "name": "function 302",
-        "func": "msg.headers = {\n    \"Content-Disposition\": \"inline\",\n    \"filename\": \"calls.pdf\",\n    'Content-Type': 'application/pdf',\n    // \"charset\": 'utf-8',\n    // \"content-transfer-encoding\": \"binary\"\n}\nreturn msg;",
+        "func": "msg.headers = {\n    \"Content-Disposition\": \"inline\",\n    // \"filename\": \"calls.pdf\",\n    'Content-Type': 'application/pdf',\n    // \"charset\": 'utf-8',\n    // \"content-transfer-encoding\": \"binary\"\n}\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
